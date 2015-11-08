@@ -32,7 +32,7 @@ def generate_history(path):
     for line in output.split('\n'):
         line = line.strip()
         if len(line) == 0:
-            continue
+            return []
         parts = line.split('|')
         author, date, msg = parts[0], dateutil.parser.parse(parts[1]), '|'.join(parts[2:])
         commits.append(Revision(author, date, msg))
