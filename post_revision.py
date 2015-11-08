@@ -36,7 +36,6 @@ def generate_history(path):
         parts = line.split('|')
         author, date, msg = parts[0], dateutil.parser.parse(parts[1]), '|'.join(parts[2:])
         commits.append(Revision(author, date, msg))
-        print "History evaluated"
     return commits
 
 
