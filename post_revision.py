@@ -18,6 +18,7 @@ Revision = namedtuple('Revision', ['author', 'date', 'msg'], verbose=True)
 def generate_post_revision(generator):
   project_root = generator.settings.get('PROJECT_ROOT', None)
   github_url = generator.settings.get('GITHUB_URL', None)
+  github_branch = generator.settings.get('GITHUB_BRANCH', 'master')
   if github_url is not None and github_url.endswith('/'):
     github_url = github_url.rstrip('/')
 
@@ -48,8 +49,9 @@ def generate_post_revision(generator):
       if relative_path.startswith('/'):
         relative_path = relative_path.lstrip('/')
 
-      setattr(page, 'github_history_url', '%s/commits/master/%s' %\
-          (github_url, relative_path))
+      setattr(page, 'github_history_url', '{gh_url}/commits/{branch}/{path}'.format(gh_url=github_url,
+                                                                                    branch=github_branch,
+                                                                                    path=relative_path))
     except:
       continue
 
