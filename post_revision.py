@@ -10,6 +10,7 @@ reverse order by date.
 """
 import subprocess
 import dateutil
+from collections import namedtuple
 
 from pelican import signals
 
