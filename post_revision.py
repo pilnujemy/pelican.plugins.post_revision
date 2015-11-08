@@ -13,6 +13,7 @@ import dateutil
 
 from pelican import signals
 
+Revision = namedtuple('Revision', ['author', 'date', 'msg'], verbose=True)
 
 def generate_post_revision(generator):
   project_root = generator.settings.get('PROJECT_ROOT', None)
@@ -28,7 +29,7 @@ def generate_post_revision(generator):
     if path is None:
       continue
     try:
-      output = subprocess.check_output('git log --format="%%ai|%%s" %s'\
+      output = subprocess.check_output('git log --format="%%an|%%ai|%%s" %s'\
           % (path), shell=True)
       commits = []
       for line in output.split('\n'):
@@ -36,8 +37,8 @@ def generate_post_revision(generator):
         if len(line) == 0:
           continue
         parts = line.split('|')
-        date, msg = dateutil.parser.parse(parts[0]), '|'.join(parts[1:])
-        commits.append((date, msg))
+        author, date, msg = parts[0], dateutil.parser.parse(parts[1]), '|'.join(parts[2:])
+        commits.append(Revision(author, date, msg))
       setattr(page, 'history', commits)
 
       if github_url is None or project_root is None:
